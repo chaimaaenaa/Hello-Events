@@ -2,7 +2,6 @@
 
 package com.hello_events.Entites;
 
--events.model;
 
 import javax.persistence.*;
 import lombok.Data;
