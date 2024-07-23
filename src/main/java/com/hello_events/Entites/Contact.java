@@ -2,8 +2,6 @@ package com.hello_events.Entites;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-
 import java.time.LocalDateTime;
 
 @Entity
