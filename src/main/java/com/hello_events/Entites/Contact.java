@@ -2,6 +2,8 @@ package com.hello_events.Entites;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,4 +27,8 @@ public class Contact {
     public enum ContactStatus {
         NEW, IN_PROGRESS, RESOLVED
     }
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
 }
