@@ -21,6 +21,8 @@ public class Event {
     private String description;
     private LocalDateTime dateTime;
     private String location;
+    private double price;
+
     @OneToMany(mappedBy = "event")
     private List<Reservation> reservations;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

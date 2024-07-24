@@ -8,6 +8,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 public class Reservation {
@@ -24,4 +26,6 @@ public class Reservation {
     private Event event;
 
     private int numberOfTickets;
+
+    private LocalDateTime lastUpdated;
 }
