@@ -27,4 +27,8 @@ public class Contact {
     public enum ContactStatus {
         NEW, IN_PROGRESS, RESOLVED
     }
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
 }

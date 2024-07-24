@@ -1,10 +1,7 @@
 
 
 package com.hello_events.Entites;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
@@ -24,9 +21,13 @@ public class Event {
     private String description;
     private LocalDateTime dateTime;
     private String location;
+    private double price;
+
     @OneToMany(mappedBy = "event")
     private List<Reservation> reservations;
-
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "event_id")
+    private List<Contact> contacts;
     public void setId(Long id) {
         this.id = id;
     }

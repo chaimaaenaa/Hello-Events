@@ -5,6 +5,7 @@ import com.hello_events.Security.JwtAuth;
 import com.hello_events.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,5 +48,17 @@ public class UserController {
             return ResponseEntity.ok(updatedUser);
         }
         return ResponseEntity.status(404).body("User not found");
+    }
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('USER')")//ila bghiti admin changer USER b ADMIN
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")// nfss l7aja bnissba l USER
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -27,4 +27,5 @@ public class Reservation {
     public enum ReservationStatus {
         CONFIRMED, PENDING, CANCELED
     }
+    private LocalDateTime lastUpdated;
 }
