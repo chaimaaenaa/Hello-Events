@@ -10,13 +10,17 @@ import java.util.List;
 
 @Service
 public class UserService {
-
+    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_PASSWORD = "admin";
+    private static final String ADMIN_EMAIL = "admin@admin.com";
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    public UserService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
     public User registerUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
@@ -45,5 +49,18 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+    public void createAdminUserIfNotExist() {
+        if (userRepository.findByUsername(ADMIN_USERNAME) == null) {
+            User admin = new User();
+            admin.setUsername(ADMIN_USERNAME);
+            admin.setPassword(passwordEncoder.encode(ADMIN_PASSWORD));
+            admin.setEmail(ADMIN_EMAIL);
+            admin.setRole(User.Role.ADMIN);
+            userRepository.save(admin);
+        }
+    }
+    public boolean adminExists() {
+        return userRepository.existsByRole(User.Role.ADMIN);
     }
 }
