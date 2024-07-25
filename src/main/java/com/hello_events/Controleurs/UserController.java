@@ -20,8 +20,13 @@ public class UserController {
     private UserService userService;
     @Autowired
     private JwtAuth jwtAuth;
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
+        user.setRole(User.Role.valueOf("USER"));
+//        if (user.getRole() == User.Role.ADMIN && userService.adminExists()) {
+//            return ResponseEntity.badRequest().body("An admin account already exists. Only one admin is allowed.");
+//        }
         return ResponseEntity.ok(userService.registerUser(user));
     }
 
