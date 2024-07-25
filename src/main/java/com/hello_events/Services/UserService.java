@@ -63,4 +63,9 @@ public class UserService {
     public boolean adminExists() {
         return userRepository.existsByRole(User.Role.ADMIN);
     }
+    public Long getUserIdByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+        return user.getId();
+    }
 }

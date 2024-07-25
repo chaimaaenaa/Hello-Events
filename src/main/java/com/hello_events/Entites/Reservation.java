@@ -1,11 +1,8 @@
 package com.hello_events.Entites;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import com.hello_events.Entites.Event;
+import com.hello_events.Entites.User;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,19 +10,31 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 public class Reservation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private int numberOfTickets;
+    private LocalDateTime reservationTime;
+
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
 
-    private int numberOfTickets;
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     private LocalDateTime lastUpdated;
+
+    // Remove the userEmail field as it's now represented by the user relationship
+    // private String userEmail;
+
+    public enum ReservationStatus {
+        PENDING, CONFIRMED, CANCELLED
+    }
+
 }
