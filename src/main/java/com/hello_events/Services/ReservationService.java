@@ -23,9 +23,9 @@ public class ReservationService {
     @Autowired
     private UserRepository userRepository;
 
-    public Reservation createReservation(Long userId, Long eventId, int numberOfTickets, LocalDateTime lastUpdated) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public Reservation createReservation(String userEmail, Long eventId, int numberOfTickets, LocalDateTime lastUpdated) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + userEmail));
 
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));

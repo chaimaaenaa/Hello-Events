@@ -59,4 +59,5 @@ public class EventService {
             throw new RuntimeException("Événement non trouvé avec l'id : " + eventId);
         }
     }
+
 }

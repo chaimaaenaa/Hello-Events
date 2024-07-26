@@ -20,4 +20,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> searchEvents(@Param("date") LocalDateTime date,
                              @Param("location") String location,
                              @Param("keyword") String keyword);
+
 }
