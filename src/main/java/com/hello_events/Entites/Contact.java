@@ -25,7 +25,7 @@ public class Contact {
     private ContactStatus status;
 
     public enum ContactStatus {
-        NEW, IN_PROGRESS, RESOLVED
+        NEW, IN_PROGRESS, PROCESSED, RESOLVED
     }
 
     @ManyToOne
