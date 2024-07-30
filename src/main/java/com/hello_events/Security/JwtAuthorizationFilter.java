@@ -1,5 +1,6 @@
 package com.hello_events.Security;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -22,18 +23,26 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
-
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
     @Value("${security.jwt.secret-key}")
     private String secretKey;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String path = request.getRequestURI();
+        logger.debug("Request path: {}", path);
+        if (path.contains("/api/users/register") || path.contains("/api/users/login")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authorizationToken = request.getHeader("Authorization");
 
         if (authorizationToken != null && authorizationToken.startsWith("Bearer ")) {
             try {
                 String jwt = authorizationToken.substring(7);
                 Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+
                 Claims claims = Jwts.parserBuilder()
                         .setSigningKey(key)
                         .build()
@@ -49,13 +58,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         username, null, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                filterChain.doFilter(request, response);
+                logger.debug("JWT successfully parsed for user: {}", username);
             } catch (Exception e) {
+                logger.error("JWT authentication failed", e);
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().write("Authentication failed: " + e.getMessage());
+                return;
             }
-        } else {
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
     }
 }

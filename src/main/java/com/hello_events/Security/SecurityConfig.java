@@ -28,19 +28,23 @@ public class SecurityConfig {
         this.userService = userService;
     }
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                        .requestMatchers("/api/users/update", "/api/users/delete/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/users/update").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 
     @Bean
     public OrderedHiddenHttpMethodFilter hiddenHttpMethodFilter() {
